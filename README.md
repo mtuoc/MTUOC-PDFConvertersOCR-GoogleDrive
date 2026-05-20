@@ -1,98 +1,146 @@
-# MTUOC-PDFConvertersOCR-GoogleDrive
-Scripts and programs to convert PDF to documents formats and perform OCR using GoogleDrive
+#MTUOC-OCR-GoogleDrive Suite
 
-A collection of lightweight Python utilities that leverage the Google Drive API to perform high-quality Optical Character Recognition (OCR) on PDF files, exporting them directly into editable Markdown (.md) or Microsoft Word (.docx) formats. This repository includes both a scriptable Command Line Interface (CLI) version and an intuitive Graphical User Interface (GUI).
-Features
+Welcome to the official technical manual and deployment documentation for the **MTUOC-OCR-GoogleDrive** suite. This software ecosystem harnesses the Google Drive API—utilizing the same deep-learning contextual neural network engine that powers Google Lens—to deliver high-precision, localized, and fully automated Optical Character Recognition (OCR).
 
-    High-Accuracy OCR: Utilizes Google Docs' native OCR engine to extract text from scanned PDFs.
+The architecture is split into two specialized deployment workflows sharing a unified functional core:
+1. **Graphical User Interface (GUI):** `MTUOC-OCR-GoogleDrive-GUI.py` – Engineered for interactive desktop operations with native support for both single-file and directory-wide batch processing.
+2. **Command-Line Interface (CLI):** `MTUOC-OCR-GoogleDrive.py` – Optimized for high-throughput headless server execution, automation scripting, and pattern-matching batch file parsing.
 
-    Dual Output Support: Convert PDFs to standard Markdown or fully formatted Word documents.
+---
 
-    Flexible Automation: Run batch tasks via the CLI or use the standalone desktop GUI application.
+## 1. Pre-Compiled Standalone Windows Binaries
 
-    Smart Fallbacks: Optional output paths; if omitted, the system automatically names the file after the source input.
+For enterprise environments or workstations deploying this suite on Windows where Python runtimes and manual dependency trees are not desired, pre-compiled standalone executable files (`.exe`) are available.
 
-    Asynchronous Execution: The GUI runs conversions on a background thread to prevent application freezing.
+* Navigate to the **Releases** section of this GitHub repository.
+* Download the latest compressed distribution archive containing the compiled binaries for either the GUI or CLI application.
+* Extract the archive to a local folder and run the executables directly without any prerequisite runtime environments.
 
-Prerequisites & Installation
+*Note: Even when utilizing standalone binaries, you must generate and supply a valid `credentials.json` configuration asset as detailed in Section 3.*
 
-Before running the applications, ensure you have Python 3.7+ installed.
+---
 
-    Clone the Repository:
-    Bash
+## 2. Runtime Environment & Dependencies (Python Native)
 
-    git clone https://github.com/YOUR_USERNAME/YOUR_REPOSITORY_NAME.git
-    cd YOUR_REPOSITORY_NAME
+To execute the core scripts natively, a Python 3.7+ installation is required. 
 
-    Install Required Dependencies:
-    Bash
+### Step 1: Component Declaration
+Create a `requirements.txt` file within your root deployment directory and paste the following official Google client library specifications. Alternativelly you can use the requirements.txt file provided in the distribution:
 
-    pip install google-auth google-auth-oauthlib google-auth-transport-requests google-api-python-client
+```text
+google-api-python-client>=2.0.0
+google-auth-httplib2>=0.1.0
+google-auth-oauthlib>=1.0.0
+```
 
-    (Note: tkinter is required for the GUI version. It comes pre-installed with standard Python distributions on Windows and macOS. Linux users may need to install it via sudo apt-get install python3-tk).
+### Step 2: Install required libraries
+Open your system terminal or command prompt, change directory to the project root, and execute the installation via pip:
 
-Setting Up Google Drive API (credentials.json)
+```bash
+pip install -r requirements.txt
+```
 
-To interact with the Google Drive API, you must authenticate your application by obtaining a client secrets configuration file from the Google Cloud Console.
-Step-by-Step Guide:
+*Note: Modules such as `tkinter`, `webbrowser`, `os`, `time`, `mimetypes`, `threading`, and `glob` are integral components of the core Python standard library and do not require external installation.*
 
-    Create a Google Cloud Project:
+---
 
-        Go to the Google Cloud Console.
+## 3. Setting up the Google Cloud API Authentication
 
-        Click on the project dropdown in the top-left corner and select New Project.
+To safely interface with Google's cloud-based OCR virtualization layers, you must declare an explicit API project within the Google Cloud Console. The suite incorporates an automated fallback handler that intercepts missing configurations and opens the management console to streamline onboarding.
 
-        Name your project (e.g., PDF-OCR-Tool) and click Create.
+### Complete Walkthrough to Generate `credentials.json`:
+1. Execute either `MTUOC-OCR-GoogleDrive-GUI.py` or `MTUOC-OCR-GoogleDrive.py`. If the configuration file is missing from the root path, the script will automatically launch your default browser directly into the Google Cloud Console.
+2. **Project Creation:** Open the project dropdown selector located in the top navigation header, select **New Project**, and allocate a unique descriptor (e.g., `MTUOC-OCR`).
+3. **API Activation:** Expand the left-hand navigation drawer, choose **APIs & Services** > **Library**. Input **"Google Drive API"** into the search field, select the asset, and click **Enable**.
+4. **OAuth Consent Configuration:** Navigate to the **OAuth consent screen** interface. Set the user type scope to **External**, fill out the mandatory metadata blocks (Application name, user support email, and developer contact details), and proceed to save.
+5. **Publishing State & Test Access:** Leave the publishing cycle status as **Testing**. Under the **Test users** matrix, click *+ Add Users* and register the exact Google email address you intend to use with this application.
+6. **Credential Provisioning:** Go to **Credentials** > **+ Create Credentials** > **OAuth client ID**.
+7. **Application Profile:** Set the Application type dropdown strictly to **Desktop app** and click **Create**.
+8. **Payload Extraction:** Click the download icon on the newly generated entry to pull the client secrets JSON file.
+9. **Deployment:** Rename the downloaded file precisely to **`credentials.json`** and place it in the exact directory where the application scripts reside.
 
-    Enable the Google Drive API:
+### Cryptographic Token Caching (`token.json`):
+Upon initiating the first batch or file conversion with `credentials.json` present, the application will redirect your browser to a secure Google identity portal. Log in, bypass the unverified app warning (this reflects your project being in sandboxed testing mode), and grant the structural permissions. This workflow caches a local, persistent OAuth refresh token named `token.json`, ensuring all subsequent automated or manual tasks execute silently without requiring web browser interactions.
 
-        In the sidebar, navigate to APIs & Services > Library.
+---
 
-        Search for Google Drive API.
+## 4. Manual: Graphical User Interface (GUI)
 
-        Click on it and select Enable.
+The GUI application provides an intuitive desktop environment optimized for multi-format conversion pipelines.
 
-    Configure the OAuth Consent Screen:
+### Core Interface Layout & Engineering:
+* **Polymorphic Input Vector:** Accepts individual files or entire folders. 
+* **Dynamic Search Architecture:** Features distinct **"Browse File..."** and **"Browse Folder..."** hooks. When choosing a directory, the backend automatically runs an asynchronous multi-extension lookahead to parse files matching `.pdf`, `.jpg`, `.jpeg`, `.png`, and `.webp`.
+* **Output Format Selector:** A standardized dropdown exposing the 8 cloud-virtualized export targets.
+* **Non-Blocking Operation:** The system spins up separate worker threads (`threading.Thread`) for file mutations, preserving fluid UI responsiveness at 60 FPS while background OCR operations take place.
+* **Interactive Log Console:** A real-time execution feedback monitor. Crucially, the log canvas is completely interactive, selectable, and copiable. Users can freely highlight segments or use `Ctrl+A` / `Ctrl+C` to copy error logs, setup guides, or path configurations without formatting degradation.
 
-        Navigate to APIs & Services > OAuth consent screen.
+### Operational Workflow:
+1. Initialize the script: `python3 MTUOC-OCR-GoogleDrive-GUI.py`.
+2. To process an isolated asset, click **Browse File...**. To process an entire directory containing mixed assets, click **Browse Folder...**.
+3. Set your target extension from the **Output Format** dropdown menu.
+4. Click **Start Conversion Process**. The UI locks execution buttons to prevent race conditions, clears previous caches, and streams live upload/OCR statuses to the log console.
 
-        Select External and click Create.
+---
 
-        Fill in the required app information (App name, User support email, Developer contact information). You can leave optional fields blank.
+## 5. Manual: Command-Line Interface (CLI)
 
-        Click Save and Continue through the Scopes and Test users screens.
+The CLI binary represents the high-efficiency alternative, engineered for execution inside bash scripts, cron jobs, remote SSH servers, or complex batch pipelines.
 
-        Crucial: Go back to the OAuth consent screen dashboard and under Publishing status, ensure it is set to Testing. Under Test users, add the specific Google Account email address you intend to use for scanning documents.
+### Argument Architecture:
+* `pattern`: Defines the explicit path, relative target, or file system wildcard string (Required positional argument).
+* `-f`, `--format`: Specifies the targeted text or document representation (Required named argument). Valid flags: `md`, `docx`, `odt`, `rtf`, `pdf`, `txt`, `epub`, `zip`.
 
-    Generate Credentials:
+### Real-World Terminal Deployments:
 
-        Navigate to APIs & Services > Credentials.
+1. **Convert a Single Flat PNG Image to Clean Markdown:**
+   ```bash
+   python3 MTUOC-OCR-GoogleDrive.py screenshot.png -f md
+   ```
 
-        Click + Create Credentials at the top and select OAuth client ID.
+2. **Convert a Scanned Document into an Editable Microsoft Word File:**
+   ```bash
+   python3 MTUOC-OCR-GoogleDrive.py legal_scan.pdf -f docx
+   ```
 
-        Set the Application type to Desktop app.
+3. **Wildcard Directory Execution: Mass Convert All PNG Images Within a Target Subdirectory to Plain Text:**
+   ```bash
+   python3 MTUOC-OCR-GoogleDrive.py "images/*.png" -f txt
+   ```
 
-        Name your client (e.g., OCR Desktop Client) and click Create.
+4. **Mixed Wildcard Batching: Extract Text From All Supported Assets Matching a Prefix into OpenDocument Text:**
+   ```bash
+   python3 MTUOC-OCR-GoogleDrive.py "archive_2026_*" -f odt
+   ```
 
-    Download the JSON file:
+---
 
-        A dialog box will appear confirming the creation. Click Download JSON.
+## 6. Matrix of Supported Cloud-Virtualized Output Formats
 
-        Rename the downloaded file to exactly credentials.json.
+The suite relies on Google Drive’s underlying export structures, converting raw visual layouts directly into highly clean semantic schemas:
 
-        Place credentials.json directly into the root directory of this project.
+| CLI Extension Flag | GUI Selection Label | Target Characteristics & Canonical Use Cases |
+| :---: | :--- | :--- |
+| md | Markdown | Structured markdown syntax tailored for documentation, static site generators, and GitHub repositories. |
+| docx | Word Document | Microsoft Word Open XML standard document format for traditional word processing workflows. |
+| odt | OpenDocument Text | Standardized open-source text format natively processed by suites like LibreOffice and OpenOffice. |
+| rtf | Rich Text Format | Universally accessible enriched text encoding designed for maximum legacy software cross-compatibility. |
+| pdf | Searchable PDF | Highly Powerful: Transforms a visual-only scanned PDF or flat image file into an optimized PDF embedded with an interactive, searchable (Ctrl+F), and searchable OCR text overlay. |
+| txt | Plain Text | Stripped raw text output completely devoid of styling, formatting, or assets. Excellent for clean copy-pasting or training MT corpora. |
+| epub | EPUB E-book | Converts extracted textual assets into a responsive digital book asset suitable for e-readers and tablets. |
+| zip | Web Page HTML | Exports the asset as a clean, zipped HTML webpage bundle containing formatted hypertext structure alongside any extracted graphics. |
 
-    Note on token.json: The first time you execute any script, your default web browser will automatically open, prompting you to log in to your Google Account and grant permission. Once authorized, a file named token.json will be generated locally. This token caches your session so you will not need to authenticate via the browser on subsequent runs.
+---
 
-Usage
-1. Graphical User Interface (GUI)
+## 7. Underlying OCR Architecture and Zero-Configuration Multilingual Modeling
 
-Perfect for interactive, single-file conversions.
+Legacy offline Optical Character Recognition applications (such as basic deployments of *Tesseract*) rely heavily on strict linguistic dictionary initializations, forcing users to declare precise language parameters at runtime (e.g., `-l cat` to capture Catalan characters) to prevent severe encoding corruption on elements like the ce trencada (ç) or grave accents. 
 
-    Launch the Application:
-    Bash
+The **MTUOC-OCR-GoogleDrive** ecosystem operates on an entirely distinct cloud-based computer vision architecture:
 
-    python gui_converter.py
+1. **Structural Layout Profiling:** Prior to text processing, deep-learning models evaluate spatial orientation and typographic script classifications (e.g., distinguishing Latin script configurations from Cyrillic or East Asian variants).
+2. **Contextual Neural Analysis:** The processing framework evaluates characters holistically as part of larger semantic phrases rather than treating individual glyphs in isolation. Statistical linguistic models infer semantic intent, dynamically capturing vocabulary, grammar, and specialized accents based on sentence context.
+3. **True Multilingual Concurrency:** Because the system evaluates text semantically rather than testing against a single localized dictionary, a single input file containing alternating paragraphs of disparate languages (e.g., a Catalan source text featuring embedded English and Spanish quotations) will process concurrently in a single pass. No manual parameter tuning or linguistic flagging is ever required from the end-user.
 
     How to use:
 
