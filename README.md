@@ -15,7 +15,7 @@ The development of these tools has been partially supported by the research proj
 
 For enterprise environments or workstations deploying this suite on Windows where Python runtimes and manual dependency trees are not desired, pre-compiled standalone executable files (`.exe`) are available.
 
-* Navigate to the **Releases** section of this GitHub repository.
+* Navigate to the **[Releases](https://github.com/mtuoc/MTUOC-OCR-GoogleDrive/releases)** section of this GitHub repository.
 * Download the latest compressed distribution archive containing the compiled binaries for either the GUI or CLI application.
 * Extract the archive to a local folder and run the executables directly without any prerequisite runtime environments.
 
